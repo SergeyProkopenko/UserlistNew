@@ -13,16 +13,6 @@ public class User {
 
     private String description;
 
-    private Integer role;
-
-    public Integer getRole() {
-        return role;
-    }
-
-    public void setRole(Integer role) {
-        this.role = role;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -63,12 +53,11 @@ public class User {
         this.description = description;
     }
 
-    public User(String name, String surname, String password, String description, Integer role) {
+    public User(String name, String surname, String password, String description) {
         this.name = name;
         this.surname = surname;
         this.password = password;
         this.description = description;
-        this.role = role;
     }
 
     public User() {
@@ -81,7 +70,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", password='" + password + '\'' +
-                ", role=" + role +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

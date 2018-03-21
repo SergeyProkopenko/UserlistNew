@@ -63,42 +63,32 @@ public class Controller {
         return "redirect:/users";
     }
 
-    @RequestMapping(value = "/signin", method = RequestMethod.POST)
-    public ModelAndView signIn(Model model,
-                               @RequestParam String name,
-                               @RequestParam String password) {
-
+    @RequestMapping(value = "/account", method = RequestMethod.POST)
+    public String signIn(@RequestParam String name, @RequestParam String password, Model model) {
         String role = repository.signInUser(name, password);
-
-        ModelAndView map = new ModelAndView("index");
-
-        if(role.equals("admin") || role.equals("user"))
-            return account(name, role);
-
-        return map;
+        if(role.equals("none")) {
+            model.addAttribute("message", "Uncorrected login or password");
+            return "index";
+        }
+        return account(name, model);
     }
 
-    private ModelAndView account(String name, String role) {
-        ModelAndView map = new ModelAndView("account");
+    private String account(String name, Model model) {
 
-        map.addObject("cars", autoRepository.getAuto(name));
-        map.addObject("allauto",autoRepository.getAllAuto());
-
-        return map;
+        model.addAttribute("cars", autoRepository.getAuto(name));
+        model.addAttribute("allauto",autoRepository.getAllAuto());
+        return "account";
     }
 
-    @RequestMapping(value = "/signin/add/{id}", method = RequestMethod.GET)
-    public ModelAndView addAuto (@PathVariable Integer id) {
-
-        ModelAndView map = new ModelAndView("/signin");
+    @RequestMapping(value = "/account/add/{id}", method = RequestMethod.GET)
+    public String addAuto (@PathVariable Integer id) {
         autoRepository.addCar(id);
-        return map;
+        return "account";
     }
 
-    @RequestMapping(value = "/signin/del/{id}", method = RequestMethod.GET)
-    public ModelAndView removeAuto (@PathVariable Integer id) {
-        ModelAndView map = new ModelAndView("/signin");
+    @RequestMapping(value = "/account/del/{id}", method = RequestMethod.GET)
+    public String removeAuto (@PathVariable Integer id) {
         autoRepository.removeCar(id);
-        return map;
+        return "account";
     }
 }

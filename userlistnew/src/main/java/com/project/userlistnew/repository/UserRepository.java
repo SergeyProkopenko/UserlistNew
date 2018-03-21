@@ -18,7 +18,7 @@ import java.util.List;
 @Transactional
 public class UserRepository {
 
-    static public User currentUser = new User(null, null, null, null, null);
+    static public User currentUser = new User(null, null, null, null);
 
     @Autowired
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -33,7 +33,6 @@ public class UserRepository {
             user.setSurname(rs.getString("USER_SURNAME"));
             user.setPassword(rs.getString("USER_PASS"));
             user.setDescription(rs.getString("USER_DESC"));
-            user.setRole(rs.getInt("ROLE_ID"));
             return user;
         }
     }
@@ -47,6 +46,7 @@ public class UserRepository {
 
     public void removeUser(Integer id) {
 
+        namedParameterJdbcTemplate.getJdbcOperations().update("DELETE FROM USER_ROLE WHERE USER_ID = ?", id);
         namedParameterJdbcTemplate.getJdbcOperations().update("DELETE FROM OWNERS WHERE USER_ID = ?", id);
         namedParameterJdbcTemplate.getJdbcOperations().update("DELETE FROM USER_TABLE WHERE USER_ID = ?", id);
     }
@@ -63,9 +63,8 @@ public class UserRepository {
             namedParameters.addValue("USER_SURNAME", surname);
             namedParameters.addValue("USER_PASS", password);
             namedParameters.addValue("USER_DESC", description);
-            namedParameters.addValue("ROLE_ID", role);
 
-            namedParameterJdbcTemplate.update("INSERT INTO USER_TABLE (USER_NAME, USER_SURNAME, USER_PASS, USER_DESC, ROLE_ID) VALUES (:USER_NAME, :USER_SURNAME, :USER_PASS, :USER_DESC, :ROLE_ID)", namedParameters);
+            namedParameterJdbcTemplate.update("INSERT INTO USER_TABLE (USER_NAME, USER_SURNAME, USER_PASS, USER_DESC) VALUES (:USER_NAME, :USER_SURNAME, :USER_PASS, :USER_DESC)", namedParameters);
             return true;
         }
         return false;
@@ -73,20 +72,13 @@ public class UserRepository {
 
     public String signInUser(String name, String password)
     {
+        String userQuery = "SELECT * FROM USER_TABLE WHERE USER_NAME = '" + name +  "' AND USER_PASS = '" + password + "'";
 
-        MapSqlParameterSource namedParameters =
-                new MapSqlParameterSource("USER_NAME", name);
-        namedParameters.addValue("USER_PASS", password);
+        List<User> userOne = namedParameterJdbcTemplate.query(userQuery, new UserRowMapper());
 
-        User user = namedParameterJdbcTemplate.queryForObject("SELECT * FROM USER_TABLE WHERE (USER_NAME = :USER_NAME) AND (USER_PASS = :USER_PASS)", namedParameters, new UserRowMapper());
-
-        currentUser.setId(user.getId());
-
-        if(user.getRole().equals(1))
-            return "user";
-        if(user.getRole().equals(2))
-            return "admin";
-        else
+        if(userOne.isEmpty())
             return "none";
+
+        return "admin";
     }
 }
