@@ -64,20 +64,18 @@ public class Controller {
     }
 
     @RequestMapping(value = "/account", method = RequestMethod.POST)
-    public String signIn(@RequestParam String name, @RequestParam String password, Model model) {
+    public ModelAndView signIn(@RequestParam String name, @RequestParam String password, Model model) {
         String role = repository.signInUser(name, password);
         if(role.equals("none")) {
-            model.addAttribute("message", "Uncorrected login or password");
-            return "index";
+            ModelAndView map1 = new ModelAndView("index");
+            map1.addObject("message", "Uncorrected login or password");
+            return map1;
+        } else {
+            ModelAndView map2 = new ModelAndView("account");
+            map2.addObject("cars", autoRepository.getAuto(name));
+            map2.addObject("allauto",autoRepository.getAllAuto());
+            return map2;
         }
-        return account(name, model);
-    }
-
-    private String account(String name, Model model) {
-
-        model.addAttribute("cars", autoRepository.getAuto(name));
-        model.addAttribute("allauto",autoRepository.getAllAuto());
-        return "account";
     }
 
     @RequestMapping(value = "/account/add/{id}", method = RequestMethod.GET)
