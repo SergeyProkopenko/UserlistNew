@@ -51,23 +51,17 @@ public class AutoRepository {
         return autos;
     }
 
-    public void addCar(Integer id)
-    {
+    public void addCar(Integer id) {
         MapSqlParameterSource namedParameters =
                 new MapSqlParameterSource("AUTO_ID", id);
         namedParameters.addValue("USER_ID", UserRepository.currentUser.getId());
-
         namedParameterJdbcTemplate.update("INSERT INTO OWNERS (AUTO_ID, USER_ID) VALUES (:AUTO_ID, :USER_ID)", namedParameters);
-
     }
 
     public void removeCar(Integer id) {
-
         MapSqlParameterSource namedParameters =
                 new MapSqlParameterSource("AUTO_ID", id);
         namedParameters.addValue("USER_ID", UserRepository.currentUser.getId());
-
         namedParameterJdbcTemplate.update("DELETE FROM OWNERS WHERE AUTO_ID = :AUTO_ID AND USER_ID = :USER_ID", namedParameters);
-
     }
 }

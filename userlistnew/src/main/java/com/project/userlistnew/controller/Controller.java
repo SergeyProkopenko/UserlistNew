@@ -83,12 +83,12 @@ public class Controller {
     @RequestMapping(value = "/account/add/{id}", method = RequestMethod.GET)
     public String addAuto (@PathVariable Integer id) {
         autoRepository.addCar(id);
-        return "account";
+        return "redirect:/account";
     }
 
     @RequestMapping(value = "/account/del/{id}", method = RequestMethod.GET)
     public String removeAuto (@PathVariable Integer id) {
         autoRepository.removeCar(id);
-        return "account";
+        return "redirect:/account";
     }
 }

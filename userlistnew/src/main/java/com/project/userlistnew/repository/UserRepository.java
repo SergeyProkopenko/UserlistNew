@@ -79,6 +79,7 @@ public class UserRepository {
         if(userOne.isEmpty())
             return "none";
 
+        currentUser.setId(userOne.get(0).getId());
         return "admin";
     }
 }

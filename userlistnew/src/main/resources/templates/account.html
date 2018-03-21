@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
     <link rel="stylesheet" type="text/css" th:href="@{css/font-awesome.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{css/bootstrap.css}">
     <link rel="stylesheet" type="text/css" th:href="@{css/style.css}">
+
     <title>Account</title>
 </head>
 <body style="background: #f6f6f6">
@@ -33,7 +35,7 @@
                     </td>
                     <td>
                         <a class="btn btn-dark"
-                            th:href= "@{signin/add/{id}(id=${auto.id})}">
+                            th:href= "@{/account/add/{id}(id=${auto.id})}">
                         Add
                         </a>
                     </td>
@@ -61,7 +63,7 @@
                     </td>
                     <td>
                         <a class="btn btn-dark"
-                           th:href= "@{signin/del/{id}(id=${car.id})}">
+                           th:href= "@{/account/del/{id}(id=${car.id})}">
                             Delete
                         </a>
                     </td>
