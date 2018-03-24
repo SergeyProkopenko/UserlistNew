@@ -15,13 +15,13 @@
 
 <div class="container center-block">
     <h1 class="text-center">Add car</h1>
-    <form method="POST" th:action="@{/sendcar}" class="form-group">
+    <form method="POST" th:object="${myUploadForm}" th:action="@{/sendcar}" class="form-group" enctype="multipart/form-data">
 
         <label for="namecar">Name of car:</label><br/>
         <input class="form-control" th:name="namecar" type="text" id="namecar" required="required" placeholder="Enter the name car"><br/>
 
         <label for="choose">Choose the car:</label><br/>
-        <input class="form-control" th:name="imgcar" type="file" accept="image/*" id="choose" required="required"><br/>
+        <input class="form-control" th:name="imgcar" th:field="*{fileDatas}"  type="file" accept="image/*" id="choose" required="required"><br/>
 
         <input type="submit" class="btn btn-primary" value="Send">
     </form>

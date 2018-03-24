@@ -3,12 +3,19 @@ package com.project.userlistnew.controller;
 import com.project.userlistnew.model.User;
 import com.project.userlistnew.repository.AutoRepository;
 import com.project.userlistnew.repository.UserRepository;
+import com.project.userlistnew.upload.MyUploadForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @org.springframework.stereotype.Controller
@@ -109,15 +116,67 @@ public class Controller {
     }
 
     @GetMapping(value = "/addcartodatabase")
-    public String addCar () {
+    public String addCar (Model model) {
+        MyUploadForm myUploadForm = new MyUploadForm();
+        model.addAttribute("myUploadForm", myUploadForm);
         return "addcar";
     }
 
     @PostMapping(value = "/sendcar")
-    public String sendCar(@RequestParam String namecar, @RequestParam String imgcar) {
+    public String sendCar(@RequestParam String namecar, HttpServletRequest request,
+                          Model model,
+                          @ModelAttribute("myUploadForm") MyUploadForm myUploadForm) {
 
-        autoRepository.sendCar(namecar, imgcar);
+        //autoRepository.sendCar(namecar, imgcar);
 
-        return "addcar";
+        return this.doUpload(request, model, myUploadForm, namecar);
+    }
+
+    private String doUpload(HttpServletRequest request, Model model, MyUploadForm myUploadForm, String namecar) {
+
+
+        // Root Directory.
+        String uploadRootPath = "/home/sergey/UserlistNew/userlistnew/src/main/resources/static/img";
+        System.out.println("uploadRootPath=" + uploadRootPath);
+
+        File uploadRootDir = new File(uploadRootPath);
+        // Create directory if it not exists.
+        if (!uploadRootDir.exists()) {
+            uploadRootDir.mkdirs();
+        }
+        MultipartFile[] fileDatas = myUploadForm.getFileDatas();
+
+        //
+        List<File> uploadedFiles = new ArrayList<File>();
+        List<String> failedFiles = new ArrayList<String>();
+
+        for (MultipartFile fileData : fileDatas) {
+
+            // Client File Name
+            String name = fileData.getOriginalFilename();
+            System.out.println("Client File Name = " + name);
+
+            autoRepository.sendCar(namecar, name);
+
+            if (name != null && name.length() > 0) {
+                try {
+                    // Create the file at server
+                    File serverFile = new File(uploadRootDir.getAbsolutePath() + File.separator + name);
+
+                    BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+                    stream.write(fileData.getBytes());
+                    stream.close();
+                    //
+                    uploadedFiles.add(serverFile);
+                    System.out.println("Write file: " + serverFile);
+                } catch (Exception e) {
+                    System.out.println("Error Write file: " + name);
+                    failedFiles.add(name);
+                }
+            }
+        }
+        model.addAttribute("uploadedFiles", uploadedFiles);
+        model.addAttribute("failedFiles", failedFiles);
+        return "uploadResult";
     }
 }
