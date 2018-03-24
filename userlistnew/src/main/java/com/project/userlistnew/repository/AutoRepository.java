@@ -64,4 +64,11 @@ public class AutoRepository {
         namedParameters.addValue("USER_ID", UserRepository.currentUser.getId());
         namedParameterJdbcTemplate.update("DELETE FROM OWNERS WHERE AUTO_ID = :AUTO_ID AND USER_ID = :USER_ID", namedParameters);
     }
+
+    public void sendCar(String namecar, String imgcar) {
+        MapSqlParameterSource namedParameters =
+                new MapSqlParameterSource("AUTO_NAME", namecar);
+        namedParameters.addValue("AUTO_IMG", imgcar);
+        namedParameterJdbcTemplate.update("INSERT INTO AUTO (AUTO_NAME, AUTO_IMG) VALUES (:AUTO_NAME, :AUTO_IMG)", namedParameters);
+    }
 }

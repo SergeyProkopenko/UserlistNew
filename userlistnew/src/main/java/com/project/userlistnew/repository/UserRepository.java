@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Repository
 @Transactional
@@ -51,12 +53,24 @@ public class UserRepository {
         namedParameterJdbcTemplate.getJdbcOperations().update("DELETE FROM USER_TABLE WHERE USER_ID = ?", id);
     }
 
-    public boolean addUser (String name, String surname, String password, String description, Integer role)
+    public String addUser (String name, String surname, String password, String passwordConfirm, String description, Integer role)
     {
 
         MapSqlParameterSource namedParameters =
                 new MapSqlParameterSource("USER_NAME", name);
         int result = namedParameterJdbcTemplate.queryForObject("SELECT COUNT(USER_NAME) FROM USER_TABLE WHERE USER_NAME = :USER_NAME", namedParameters, Integer.class);
+
+        if(!password.equals(passwordConfirm))
+            return "Passwords don't match!";
+
+        if(password.length() < 8)
+            return "Short password!";
+
+        Pattern p = Pattern.compile("^[a-z0-9_-]{8,15}$");
+        Matcher m = p.matcher(password);
+
+        if(!m.matches())
+            return "Uncorrected password";
 
         if (result == 0) {
 
@@ -65,9 +79,11 @@ public class UserRepository {
             namedParameters.addValue("USER_DESC", description);
 
             namedParameterJdbcTemplate.update("INSERT INTO USER_TABLE (USER_NAME, USER_SURNAME, USER_PASS, USER_DESC) VALUES (:USER_NAME, :USER_SURNAME, :USER_PASS, :USER_DESC)", namedParameters);
-            return true;
+            return "Success";
+        } else {
+            return "User already exists!";
         }
-        return false;
+
     }
 
     public String signInUser(String name, String password)

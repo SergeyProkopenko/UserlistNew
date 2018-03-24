@@ -5,10 +5,7 @@ import com.project.userlistnew.repository.AutoRepository;
 import com.project.userlistnew.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.SQLException;
@@ -38,14 +35,35 @@ public class Controller {
                           @RequestParam String name,
                           @RequestParam String surname,
                           @RequestParam String password,
+                          @RequestParam String passwordConfirm,
                           @RequestParam String description)  {
 
-        boolean foo = repository.addUser(name, surname, password, description, 1);
-        if (!foo) {
+        String result = repository.addUser(name, surname, password, passwordConfirm, description, 1);
+
+        if (result.equals("Passwords don't match!")) {
+            model.addAttribute("messageBad", "Passwords don't match!");
+            return "signup";
+        }
+
+        if (result.equals("Short password!")) {
+            model.addAttribute("messageBad", "Short password!");
+            return "signup";
+        }
+
+        if(result.equals("Uncorrected password")) {
+            model.addAttribute("messageBad", "Uncorrected password!");
+        }
+
+
+        if (result.equals("User already exists!")) {
             model.addAttribute("messageBad", "A person with this name already exists!");
             return "signup";
         }
-        model.addAttribute("messageGood", "A person successfully added!");
+
+        if(result.equals("Success")) {
+            model.addAttribute("messageGood", "A person successfully added!");
+            return "signup";
+        }
         return "signup";
     }
 
@@ -88,5 +106,18 @@ public class Controller {
     public String removeAuto (@PathVariable Integer id) {
         autoRepository.removeCar(id);
         return "redirect:/account";
+    }
+
+    @GetMapping(value = "/addcartodatabase")
+    public String addCar () {
+        return "addcar";
+    }
+
+    @PostMapping(value = "/sendcar")
+    public String sendCar(@RequestParam String namecar, @RequestParam String imgcar) {
+
+        autoRepository.sendCar(namecar, imgcar);
+
+        return "addcar";
     }
 }

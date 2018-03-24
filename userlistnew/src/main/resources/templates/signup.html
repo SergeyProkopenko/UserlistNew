@@ -18,13 +18,17 @@
         <div class="col-lg-4 m-auto">
             <form method="POST" th:action="@{/signup}" class="form-group">
                 <label for="name">Your name:</label><br/>
-                <input class="form-control" th:name="name" type="text" required id="name" placeholder="Enter the name"><br/>
+                <input class="form-control" th:name="name" type="text" required id="name" placeholder="Enter the name">
 
                 <label for="surname">Your surname:</label><br/>
-                <input class="form-control" th:name="surname" type="text" required="required" id="surname" placeholder="Enter the surname"><br/>
+                <input class="form-control" th:name="surname" type="text" required="required" id="surname" placeholder="Enter the surname">
 
                 <label for="password">Your password:</label><br/>
-                <input class="form-control" th:name="password" type="password" id="password" required="required" placeholder="Enter the password"><br/>
+                <input class="form-control" th:name="password" type="password" id="password" required="required" placeholder="Enter the password">
+                <small id="help" class="form-text text-muted">The password should must not be less 8 characters in length, contain English characters and digits.</small>
+
+                <label for="passwordConfirm">Confirm your password:</label><br/>
+                <input class="form-control" th:name="passwordConfirm" type="password" id="passwordConfirm" required="required" placeholder="Confirm your password">
 
                 <label for="description">Your description:</label><br/>
                 <input class="form-control" th:name="description" type="text" id="description" placeholder="Enter the description"><br/>
