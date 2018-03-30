@@ -26,9 +26,9 @@ public class Controller {
     @Autowired
     private AutoRepository autoRepository;
 
-    @RequestMapping(value = {"/index", "/"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
     public String startPage() {
-        return "index";
+        return "loginPage";
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
@@ -95,16 +95,22 @@ public class Controller {
     @RequestMapping(value = "/account", method = RequestMethod.POST)
     public ModelAndView signIn(@RequestParam String name, @RequestParam String password, Model model) {
         String role = repository.signInUser(name, password);
+        ModelAndView map1 = new ModelAndView("loginPage");
         if(role.equals("none")) {
-            ModelAndView map1 = new ModelAndView("index");
+
             map1.addObject("message", "Uncorrected login or password");
-            return map1;
+
         } else {
-            ModelAndView map2 = new ModelAndView("account");
-            map2.addObject("cars", autoRepository.getAuto(name));
-            map2.addObject("allauto",autoRepository.getAllAuto());
-            return map2;
+             return account(name);
         }
+        return map1;
+    }
+    //@RequestMapping(value = "/account", method = RequestMethod.GET)
+    private ModelAndView account(String name) {
+        ModelAndView map2 = new ModelAndView("account");
+        map2.addObject("cars", autoRepository.getAuto(name));
+        map2.addObject("allauto",autoRepository.getAllAuto());
+        return map2;
     }
 
     @RequestMapping(value = "/account/add/{id}", method = RequestMethod.GET)
@@ -140,8 +146,8 @@ public class Controller {
 
 
         // Root Directory.
-        //String uploadRootPath = "/home/sergey/img";
-        String uploadRootPath = "/home/sergey/UserlistNew/userlistnew/src/main/resources/static/img";
+        String uploadRootPath = "/home/sergey/img";
+        //String uploadRootPath = "/home/sergey/UserlistNew/userlistnew/src/main/resources/static/img";
         System.out.println("uploadRootPath=" + uploadRootPath);
 
         File uploadRootDir = new File(uploadRootPath);

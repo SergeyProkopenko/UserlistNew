@@ -17,15 +17,25 @@
     <title>Account</title>
 </head>
 <body style="background: #f6f6f6">
-
-<a th:href="@{/addcartodatabase}">Add car to database</a><br/>
-<a th:href="@{users}">User manager</a> <br/>
-<a th:href="@{/logout}">Log Out</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/addcartodatabase}">Add car to database</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{users}">User manager</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/logout}">Log Out</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 <div class="container-fluid pt-3">
     <h3 class="text-center">Available cars</h3>
-
         <div class="card m-3 float-left" style="width: 10rem;" th:each="auto : ${allauto}">
-            <img class="card-img-top" th:src="@{/img/{url}(url=${auto.url})}" th:height="110" alt="Card image cap">
+            <img class="card-img-top" th:src="@{../../../img/{url}(url=${auto.url})}" th:height="110" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title" th:utext="${auto.name}"></h5>
                 <p>Some example text</p>
@@ -33,7 +43,6 @@
             </div>
         </div>
 </div>
-
 <div class="container">
     <table border="1px" class="table table-bordered table-hover table-sm ">
         <thead>

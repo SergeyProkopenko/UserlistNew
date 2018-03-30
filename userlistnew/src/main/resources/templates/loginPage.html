@@ -14,12 +14,11 @@
 </head>
 <body style="background: #f6f6f6">
 
-<img th:src="@{/home/sergey/img/path3337.png}">
-
+<img th:src="@{~/home/sergey/img/path3337.png}">
 <div class="container col-3 pt-3">
     <div class="center-block">
         <h1 class="text-center">Sign In</h1>
-        <form method="post" th:action="@{/account}" class="form-group">
+        <form method="POST" th:action="@{/account}" class="form-group">
             <label for="name">Name:</label><br/>
             <input class="form-control" th:name="name" type="text" id="name" placeholder="Enter the name"><br/>
 
