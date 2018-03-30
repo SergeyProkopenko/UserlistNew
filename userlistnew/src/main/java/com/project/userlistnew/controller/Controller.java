@@ -26,7 +26,6 @@ public class Controller {
     @Autowired
     private AutoRepository autoRepository;
 
-    
     @RequestMapping(value = {"/index", "/"}, method = RequestMethod.GET)
     public String startPage() {
         return "index";
@@ -35,6 +34,11 @@ public class Controller {
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String signUp() {
         return "signup";
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logOut() {
+        return "logoutSuccessfulPage";
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
