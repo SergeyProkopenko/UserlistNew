@@ -18,26 +18,8 @@
 </head>
 <body style="background: #f6f6f6">
 
-<div id="root"></div>
-
-<script type="text/babel">
-    class Cardauto extends React.Component {
-        render () {
-            return (
-                <div>
-                </div>
-            );
-        }
-    }
-
-    ReactDOM.render(
-        <div>
-            <Cardauto />
-        </div>,
-        document.getElementById("root")
-    );
-</script>
-<a th:href="@{/addcartodatabase}">Add car to database</a>
+<a th:href="@{/addcartodatabase}">Add car to database</a> <br/>
+<a th:href="@{users}">User manager</a>
 <div class="container-fluid pt-3">
     <h3 class="text-center">Available cars</h3>
 
@@ -49,73 +31,34 @@
                 <a th:href= "@{/account/add/{id}(id=${auto.id})}" class="btn btn-primary">Add</a>
             </div>
         </div>
-
 </div>
 
-
-
-    <div class="container pt-3">
-        <div class="row">
-            <div class="col-sm" th:remove="all">
-                <h3 class="text-center">Available cars</h3>
-                <table border="1px" class="table table-bordered table-hover table-sm ">
-                    <thead>
-                    <td>
-                        Name
-                    </td>
-                    <td>
-                        Logo
-                    </td>
-                    <td>
-                        Add a car
-                    </td>
-                    </thead>
-                    <tr th:each="auto : ${allauto}">
-                        <td th:utext="${auto.name}"></td>
-                        <td>
-                            <img th:src="${auto.url}" width="50" height="50">
-                        </td>
-                        <td>
-                            <a class="btn btn-dark"
-                                th:href= "@{/account/add/{id}(id=${auto.id})}">
-                            Add
-                            </a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="col-sm" th:remove="all">
-                <h3 class="text-center">Your cars</h3>
-                <table border="1px" class="table table-bordered table-hover table-sm ">
-                    <thead>
-                    <td>
-                        Name
-                    </td>
-                    <td>
-                        Logo
-                    </td>
-                    <td>
-                        Delete a car
-                    </td>
-                    </thead>
-                    <tr th:each="car : ${cars}">
-                        <td th:utext="${car.name}"></td>
-                        <td>
-                            <img th:src="${car.url}" width="50" height="50">
-                        </td>
-                        <td>
-                            <a class="btn btn-dark"
-                               th:href= "@{/account/del/{id}(id=${car.id})}">
-                                Delete
-                            </a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="col-sm" th:remove="all">
-                <a th:href="@{users}">User manager</a>
-            </div>
-        </div>
-    </div>
+<div class="container">
+    <table border="1px" class="table table-bordered table-hover table-sm ">
+        <thead>
+        <td>
+            Name
+        </td>
+        <td>
+            Logo
+        </td>
+        <td>
+            Delete a car
+        </td>
+        </thead>
+        <tr th:each="car : ${cars}">
+            <td th:utext="${car.name}"></td>
+            <td>
+                <img th:src="@{/img/{url}(url=${car.url})}" width="50" height="50">
+            </td>
+            <td>
+                <a class="btn btn-dark"
+                   th:href= "@{/account/del/{id}(id=${car.id})}">
+                    Delete
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

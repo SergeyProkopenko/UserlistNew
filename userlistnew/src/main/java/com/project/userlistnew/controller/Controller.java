@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +26,7 @@ public class Controller {
     @Autowired
     private AutoRepository autoRepository;
 
+    
     @RequestMapping(value = {"/index", "/"}, method = RequestMethod.GET)
     public String startPage() {
         return "index";
@@ -136,6 +136,7 @@ public class Controller {
 
 
         // Root Directory.
+        //String uploadRootPath = "/home/sergey/img";
         String uploadRootPath = "/home/sergey/UserlistNew/userlistnew/src/main/resources/static/img";
         System.out.println("uploadRootPath=" + uploadRootPath);
 
@@ -146,7 +147,6 @@ public class Controller {
         }
         MultipartFile[] fileDatas = myUploadForm.getFileDatas();
 
-        //
         List<File> uploadedFiles = new ArrayList<File>();
         List<String> failedFiles = new ArrayList<String>();
 
@@ -156,7 +156,7 @@ public class Controller {
             String name = fileData.getOriginalFilename();
             System.out.println("Client File Name = " + name);
 
-            autoRepository.sendCar(namecar, name);
+
 
             if (name != null && name.length() > 0) {
                 try {
@@ -174,7 +174,7 @@ public class Controller {
                     failedFiles.add(name);
                 }
             }
-        }
+            autoRepository.sendCar(namecar, name);        }
         model.addAttribute("uploadedFiles", uploadedFiles);
         model.addAttribute("failedFiles", failedFiles);
         return "uploadResult";
